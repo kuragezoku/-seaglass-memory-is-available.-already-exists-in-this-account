@@ -87,7 +87,7 @@
       background-image: url("トップページ背景.png");
       background-size: cover;
       background-position: center;
-      color: #000000; font-weight:900; font-weight:800;
+      color: #111827;
       text-align: center;
     }
 
@@ -101,7 +101,7 @@
       max-width: 960px;
       width: min(92%, 960px);
       padding: 3rem 2.8rem;
-      background:rgba(255,255,255,0.40);
+      background:rgba(255,255,255,0.90);
       border-radius: 18px;
       box-shadow: 0 24px 60px rgba(15,23,42,0.25);
       opacity: 0;
@@ -155,7 +155,7 @@
       max-width: 900px;
       width: min(92%, 900px);
       padding: 3rem 2.5rem 3.2rem;
-      background:rgba(255,255,255,0.40);
+      background:rgba(255,255,255,0.90);
       border-radius: 20px;
       box-shadow: 0 18px 45px rgba(15,23,42,0.23);
       overflow: hidden;
@@ -182,11 +182,11 @@
     .chapter-body .question {
       margin-bottom: 1.8rem;
       font-size: 1rem;
-      color: #000000; font-weight:900; font-weight:800;
+      color: #111827;
     }
 
     .chapter-body .question strong {
-      font-weight:800;
+      font-weight: 700;
       color: #0f172a;
     }
 
@@ -199,7 +199,7 @@
       border-radius: 999px;
       border: none;
       background: rgba(15,23,42,0.08);
-      color: #000000; font-weight:900; font-weight:800;
+      color: #111827;
       font-family: inherit;
       font-size: 0.9rem;
       cursor: pointer;
@@ -253,13 +253,13 @@
   padding: 140px 0;
 }
 .chapter-end .chapter-inner {
-  background:rgba(255,255,255,0.40);
+  background:rgba(255,255,255,0.90);
   backdrop-filter: blur(10px);
   border-radius: 18px;
   padding: 52px 32px;
 }
 .chapter-end .story {
-  color: #000000; font-weight:900; font-weight:800;
+  color: #111827;
 }
 
 /* ===== 深層のきざしパネル ===== */
@@ -295,18 +295,18 @@
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(255,255,255,0.02),
-        rgba(255,255,255,0.08)
+        rgba(255,255,255,0.78),
+        rgba(255,255,255,0.92)
       );
     }
 
     .depth-content {
-      font-weight:800;
+      font-weight: 500;
       position: relative;
       padding: 1.6rem 1.8rem 1.7rem;
-      font-size: 0.95rem;
-      color: #000000; font-weight:900; font-weight:800;
-      background: rgba(255,255,255,0.12);
+      font-size: 0.96rem;
+      color: #111827;
+      background: rgba(255,255,255,0.72);
       border-radius: 14px;
     }
 
@@ -490,13 +490,13 @@
     .depth-scrim {
       background: linear-gradient(
         to bottom,
-        rgba(255,255,255,0.55),
-        rgba(255,255,255,0.75)
+        rgba(255,255,255,0.25),
+        rgba(255,255,255,0.45)
       );
     }
 
     .chapter-night .chapter-inner {
-      background:rgba(255,255,255,0.40);
+      background:rgba(255,255,255,0.90);
     }
 
     .chapter-end {
@@ -529,7 +529,7 @@
     }
 
     .chapter-end .story {
-      color: #000000; font-weight:900; font-weight:800;
+      color: #111827;
       white-space: pre-line;
       line-height: 2;
     }
@@ -560,26 +560,37 @@
       display: inline-block;
       padding: 0.9rem 1.6rem;
       margin: 0 auto;
-      background:rgba(255,255,255,0.40);
+      background:rgba(255,255,255,0.90);
       border-radius: 999px;
       font-size: 1.1rem;
       font-weight: 500;
-      color: #000000; font-weight:900; font-weight:800;
+      color: #111827;
       line-height: 1.9;
       text-shadow: none;
     }
 
   /* ---- 最後のひとこと（Ⅳ.いま のカード内） ---- */
-  .chapter-body .story.final-message {
-  font-size: 0.88rem;
-  line-height: 1.4;
-  text-align: center;
-  margin-top: 0.8rem;
-  margin-bottom: 0;
-}
+  .chapter-body .final-message {
+    margin-top: 0.8rem;
+    margin-bottom: 0;
+    font-size: 0.88rem;
+    color: #374151;
+    line-height: 1.4;
+    text-align: center;
+  }
 
   /* ---- スマホ用の微調整 ---- */
   @media (max-width: 480px) {
+
+    /* Ⅳ.いま の最後の3行専用（スマホ） */
+    .chapter-body .final-message {
+      font-size: 0.88rem;
+      line-height: 1.4;
+      margin-top: 0.8rem;
+      margin-bottom: 0;
+      text-align: center;
+    }
+
 
     /* タイトル周り少しコンパクトに */
     .hero-title {
@@ -617,7 +628,7 @@
         max-width: 640px;
         padding: 24px 18px 28px;
         margin: 0 auto;
-        background:rgba(255,255,255,0.40);
+        background:rgba(255,255,255,0.90);
         box-shadow: 0 18px 40px rgba(15,23,42,0.16);
       }
 
@@ -647,7 +658,7 @@
         width: min(92%, 640px);
         padding: 24px 18px 26px;
         margin: 0 auto;
-        background:rgba(255,255,255,0.40);
+        background:rgba(255,255,255,0.90);
         border-radius: 22px;
         box-shadow: 0 16px 38px rgba(15,23,42,0.14);
       }
@@ -662,14 +673,12 @@
         line-height: 1.9;
       }
 
-      .chapter-body .story.final-message,
-.chapter-end .final-message {
-  font-size: 0.88rem;
-  line-height: 1.4;
-  text-align: center;
-  margin-top: 0.8rem;
-  margin-bottom: 0;
-}
+      .chapter-body .final-message,
+      .chapter-end .final-message {
+        font-size: 0.96rem;
+        line-height: 1.6;
+        text-align: center;
+      }
 
       .chapter-end {
         padding: 72px 14px 96px;
@@ -694,8 +703,6 @@
         letter-spacing: 0.14em;
       }
     }
-  .kizashi-nowrap { white-space: nowrap; }
-  .kizashi-nowrap { white-space: nowrap; display: inline-block; width: max-content; }
 </style>
 </head>
 <body>
@@ -844,7 +851,9 @@
 
         
         <p class="story final-message">
-モノを選ぶときも手放すときも、あなたの気持ちが静かに映っている。その一瞬が、モノを大切にする心につながりますように。
+モノを選ぶときも手放すときも、<br>
+あなたの気持ちが静かに映っている。<br>
+その一瞬が、モノを大切にする心につながりますように。
         </p>
 
 <div class="depth-panel" id="depth-night">
@@ -854,7 +863,8 @@
             <h3>■ 深層のきざし</h3>
             <p>拾い上げたいと思うモノは、
 あなたが “再び向き合いたい” と感じる鏡。
-<span class="kizashi-nowrap">それは過去ではなく、いまのあなた自身。</span></p>
+それは過去ではなく、
+いまのあなた自身。</p>
           </div>
         </div>
       </div>
