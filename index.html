@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>シーグラスの追憶</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    /* ===== ベース設定 ===== */
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Yu Mincho", "游明朝", "Hiragino Mincho ProN",
+                   "Noto Serif JP", serif;
+      color: #374151;
+      background-color: #f9fafb;
+      line-height: 1.9;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0 0 1.2em;
+    }
+
+    .page-wrap {
+      min-height: 100vh;
+      background-color: #000;
+    }
+
+    /* ===== 共通オーバーレイ（ゆらぎ） ===== */
+    .with-yuragi {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .with-yuragi::before {
+      /* ゆらぎレイヤー */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("ゆらぎ素材.png");
+      background-size: cover;
+      background-position: center;
+      mix-blend-mode: screen;
+      opacity: 0.4;
+      animation: drift 22s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    .with-yuragi::after {
+      /* 文字を読みやすくする薄いグラデーション */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left,
+                  rgba(255,255,255,0.40) 0,
+                  rgba(255,255,255,0.65) 35%,
+                  rgba(255,255,255,0.85) 70%);
+      pointer-events: none;
+    }
+
+    @keyframes drift {
+      0%   { transform: translate3d(-10px, 0, 0) scale(1.02); }
+      100% { transform: translate3d(10px, -8px, 0) scale(1.05); }
+    }
+
+    /* ===== タイトルセクション ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6vh 5vw;
+      background-image: url("トップページ背景.png");
+      background-size: cover;
+      background-position: center;
+      color: #000000; font-weight:900; font-weight:800;
+      text-align: center;
+    }
+
+    .hero::before,
+    .hero::after {
+      /* ゆらぎ＋白グラデは流用 */
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 960px;
+      width: min(92%, 960px);
+      padding: 3rem 2.8rem;
+      background:rgba(255,255,255,0.40);
+      border-radius: 18px;
+      box-shadow: 0 24px 60px rgba(15,23,42,0.25);
+      opacity: 0;
+      transform: translate3d(0, 24px, 0);
+      animation: heroFadeIn 1.6s ease-out forwards 0.2s;
+    }
+
+    @keyframes heroFadeIn {
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 3.5vw, 2.8rem);
+      letter-spacing: 0.18em;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 1.5vw, 1.1rem);
+      color: #52525B;
+    }
+
+    .hero-note {
+      margin-top: 2.4rem;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .hero-lead {
+      text-wrap: balance;
+    }
+
+    /* ===== 章セクション共通 ===== */
+    .chapter {
+
+      position: relative;
+      padding: 9vh 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    
+  position: relative;
+  z-index: 0;
+}
+
+    .chapter-inner {
+      position: relative;
+      max-width: 900px;
+      width: min(92%, 900px);
+      padding: 3rem 2.5rem 3.2rem;
+      background:rgba(255,255,255,0.40);
+      border-radius: 20px;
+      box-shadow: 0 18px 45px rgba(15,23,42,0.23);
+      overflow: hidden;
+    }
+
+    .chapter-title {
+      font-size: 1.2rem;
+      letter-spacing: 0.18em;
+      color: #374151;
+      margin-bottom: 1.4rem;
+    }
+
+    .chapter-body {
+      font-size: 1rem;
+      color: #52525B;
+      line-height: 1.9;
+    }
+
+    .chapter-body .story {
+      margin-bottom: 1.8rem;
+      white-space: pre-line;
+    }
+
+    .chapter-body .question {
+      margin-bottom: 1.8rem;
+      font-size: 1rem;
+      color: #000000; font-weight:900; font-weight:800;
+    }
+
+    .chapter-body .question strong {
+      font-weight:800;
+      color: #0f172a;
+    }
+
+    /* ===== のぞくボタン ===== */
+    .peek-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      border: none;
+      background: rgba(15,23,42,0.08);
+      color: #000000; font-weight:900; font-weight:800;
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+      transition: background 0.2s ease, transform 0.15s ease,
+                  box-shadow 0.15s ease;
+    }
+
+    .peek-button img {
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
+
+    .peek-button span {
+      letter-spacing: 0.18em;
+    }
+
+    .peek-button::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle at 30% 0%,
+                  rgba(255,255,255,0.9), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .peek-button:hover {
+      background: rgba(15,23,42,0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15,23,42,0.18);
+    }
+
+    .peek-button:hover::before {
+      opacity: 1;
+    }
+
+    .peek-button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    
+.chapter-end {
+  position: relative;
+  background: url('トップページ背景.png') center/cover no-repeat;
+  padding: 140px 0;
+}
+.chapter-end .chapter-inner {
+  background:rgba(255,255,255,0.40);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 52px 32px;
+}
+.chapter-end .story {
+  color: #000000; font-weight:900; font-weight:800;
+}
+
+/* ===== 深層のきざしパネル ===== */
+    .depth-panel {
+      position: relative;
+      margin-top: 1.9rem;
+      border-radius: 16px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transform: translate3d(0, 8px, 0);
+      transition: max-height 0.5s ease, opacity 0.4s ease,
+                  transform 0.4s ease;
+    }
+
+    .depth-panel.open {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      max-height: 400px;
+    }
+
+    .depth-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: blur(3px);
+      transform: scale(1.05);
+    }
+
+    .depth-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.02),
+        rgba(255,255,255,0.08)
+      );
+    }
+
+    .depth-content {
+      font-weight:800;
+      position: relative;
+      padding: 1.6rem 1.8rem 1.7rem;
+      font-size: 0.95rem;
+      color: #000000; font-weight:900; font-weight:800;
+      background: rgba(255,255,255,0.12);
+      border-radius: 14px;
+    }
+
+    .depth-content h3 {
+      font-size: 0.96rem;
+      letter-spacing: 0.18em;
+      margin-bottom: 0.8rem;
+      color: #4b5563;
+    }
+
+    .depth-content p {
+      margin-bottom: 0;
+      white-space: pre-line;
+    }
+
+    /* ===== 背景割り当て ===== */
+    .chapter-morning {
+      background-image: url("背景朝.png");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .chapter-noon {
+      background-image: url("背景昼.png");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .chapter-evening {
+      background-image: url("背景夕.png");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .chapter-night {
+      background-image: url("背景夜.png");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .chapter-morning .depth-bg {
+      background-image: url("朝きざし1920×1080.png");
+    }
+
+    .chapter-noon .depth-bg {
+      background-image: url("昼きざし1920×1080.png");
+    }
+
+    .chapter-evening .depth-bg {
+      background-image: url("夕きざし1920×1080.png");
+    }
+
+    .chapter-night .depth-bg {
+      background-image: url("夜きざし1920×1080.png");
+    }
+
+    /* ===== スクロール時のフェードイン ===== */
+    .chapter-inner {
+      opacity: 0;
+      transform: translate3d(0, 28px, 0);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+
+    .chapter.in-view .chapter-inner {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .chapter-body .story,
+    .chapter-body .question,
+    .peek-button {
+      opacity: 0;
+      transform: translate3d(0, 14px, 0);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .chapter.in-view .chapter-body .story {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      transition-delay: 0.1s;
+    }
+
+    .chapter.in-view .chapter-body .question {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      transition-delay: 0.25s;
+    }
+
+    .chapter.in-view .peek-button {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      transition-delay: 0.4s;
+    }
+
+    /* ===== レスポンシブ調整 ===== */
+    @media (max-width: 768px) {
+      .hero-inner {
+        padding: 2.4rem 1.8rem;
+      }
+      .chapter {
+
+        padding: 7vh 4vw;
+      
+  position: relative;
+  z-index: 0;
+}
+      .chapter-inner {
+        padding: 2.3rem 1.6rem 2.6rem;
+      }
+      .depth-content {
+      font-weight: 500;
+        padding: 1.3rem 1.4rem 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-inner {
+        padding: 2rem 1.4rem;
+      }
+      .hero-lead {
+        font-size: 0.94rem;
+      }
+      .hero-note {
+      margin-top: 2.4rem;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .hero-lead {
+      text-wrap: balance;
+    }
+      .chapter-title {
+        font-size: 1.05rem;
+      }
+      .chapter-body {
+        font-size: 0.96rem;
+      }
+      .depth-panel.open {
+        max-height: 460px;
+      }
+    }
+  
+
+      .chapter-body,
+      .chapter-body p,
+      .chapter-body .story,
+      .chapter-body .question,
+      .chapter-body .final-message,
+      .depth-content {
+      font-weight: 500;
+        color: #2c2c2c;
+      }
+    /* ==== ここから最終調整の上書き ===== */
+
+    .page-wrap {
+      min-height: 100vh;
+      background-color: #f9fafb;
+    }
+
+    .with-yuragi::after {
+      /* 文字と背景の「クリアさ」を両立する淡いグラデーション */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left,
+                  rgba(255,255,255,0.25) 0,
+                  rgba(255,255,255,0.45) 35%,
+                  rgba(255,255,255,0.65) 70%);
+      pointer-events: none;
+    }
+
+    .depth-panel.open {
+      max-height: 480px;
+    }
+
+    .depth-bg {
+      filter: blur(1.5px);
+      transform: scale(1.03);
+    }
+
+    .depth-scrim {
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.55),
+        rgba(255,255,255,0.75)
+      );
+    }
+
+    .chapter-night .chapter-inner {
+      background:rgba(255,255,255,0.40);
+    }
+
+    .chapter-end {
+      background: url('トップページ背景.png') center/cover no-repeat;
+      padding: 140px 0;
+    }
+
+    
+    
+    .chapter-end {
+      background: url('トップページ背景.png') center/cover no-repeat;
+      padding: 140px 5vw 180px;
+      text-align: center;
+    }
+
+    .chapter-end .chapter-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+      backdrop-filter: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .chapter-end .chapter-body {
+      font-size: 1.05rem;
+    }
+
+    .chapter-end .story {
+      color: #000000; font-weight:900; font-weight:800;
+      white-space: pre-line;
+      line-height: 2;
+    }
+
+    .chapter-end .final-message {
+      font-size: 1.2rem;
+      font-weight: 500;
+      text-shadow:
+        0 0 10px rgba(255,255,255,0.9),
+        0 0 20px rgba(255,255,255,0.85);
+    }
+
+
+
+    .chapter-end .chapter-body {
+      text-align: center;
+    }
+
+    .chapter-end .final-message {
+      font-size: 1.2rem;
+      color: #374151;
+      line-height: 2;
+      text-shadow: 0 0 10px rgba(255,255,255,0.95);
+    }
+
+    /* 最後のメッセージだけ、読みやすさ最優先のハイライト */
+    .chapter-end .final-message {
+      display: inline-block;
+      padding: 0.9rem 1.6rem;
+      margin: 0 auto;
+      background:rgba(255,255,255,0.40);
+      border-radius: 999px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #000000; font-weight:900; font-weight:800;
+      line-height: 1.9;
+      text-shadow: none;
+    }
+
+  /* ---- 最後のひとこと（Ⅳ.いま のカード内） ---- */
+  .chapter-body .story.final-message {
+  font-size: 0.88rem;
+  line-height: 1.4;
+  text-align: center;
+  margin-top: 0.8rem;
+  margin-bottom: 0;
+}
+
+  /* ---- スマホ用の微調整 ---- */
+  @media (max-width: 480px) {
+
+    /* タイトル周り少しコンパクトに */
+    .hero-title {
+      margin-top: 40px !important;
+      margin-bottom: 24px !important;
+      line-height: 1.3;
+    }
+
+    /* 本文を少し濃くして読みやすく */
+    .hero-lead,
+    .chapter-body p,
+    .chapter-body .story {
+      color: rgba(55, 65, 81, 0.98) !important;
+      line-height: 1.8;
+    }
+
+    /* カードの内側余白をスマホ向けに */
+    .content-card {
+      padding: 24px 20px !important;
+    }
+  }
+
+    /* === Smartphone readability tweaks (2025-11 mobile fix) === */
+    @media (max-width: 768px) {
+      body {
+        background-color: #f9fafb;
+      }
+
+      .hero {
+        padding: 64px 16px;
+        min-height: 100vh;
+      }
+
+      .hero-inner {
+        max-width: 640px;
+        padding: 24px 18px 28px;
+        margin: 0 auto;
+        background:rgba(255,255,255,0.40);
+        box-shadow: 0 18px 40px rgba(15,23,42,0.16);
+      }
+
+      .hero-title {
+        font-size: 1.7rem;
+        line-height: 1.7;
+        letter-spacing: 0.16em;
+      }
+
+      .hero-sub {
+        font-size: 0.95rem;
+        line-height: 1.85;
+      }
+
+      .hero-note {
+        font-size: 0.9rem;
+        line-height: 1.9;
+      }
+
+      .chapter {
+        padding: 56px 14px;
+        align-items: stretch;
+      }
+
+      .chapter-inner {
+        max-width: 640px;
+        width: min(92%, 640px);
+        padding: 24px 18px 26px;
+        margin: 0 auto;
+        background:rgba(255,255,255,0.40);
+        border-radius: 22px;
+        box-shadow: 0 16px 38px rgba(15,23,42,0.14);
+      }
+
+      .chapter-title {
+        font-size: 1rem;
+        letter-spacing: 0.18em;
+      }
+
+      .chapter-body {
+        font-size: 0.96rem;
+        line-height: 1.9;
+      }
+
+      .chapter-body .story.final-message,
+.chapter-end .final-message {
+  font-size: 0.88rem;
+  line-height: 1.4;
+  text-align: center;
+  margin-top: 0.8rem;
+  margin-bottom: 0;
+}
+
+      .chapter-end {
+        padding: 72px 14px 96px;
+      }
+
+      .chapter-end .chapter-body {
+        text-align: left;
+      }
+
+      .peek-button {
+        font-size: 0.9rem;
+        padding: 0.5rem 1.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding-top: 56px;
+      }
+      .hero-title {
+        font-size: 1.55rem;
+        letter-spacing: 0.14em;
+      }
+    }
+  .kizashi-nowrap { white-space: nowrap; }
+  .kizashi-nowrap { white-space: nowrap; display: inline-block; width: max-content; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ===== タイトルセクション ===== -->
+  <section class="hero with-yuragi" id="top">
+    <div class="hero-inner">
+      <h1 class="hero-title">シーグラスの追憶</h1>
+      <p class="hero-sub hero-lead">
+        光を受け、忘れられ、形を変え、<br>
+        また拾われた——。<br>
+        シーグラスが辿った小さな記憶を、あなた自身の時間や心の動きと重ねながら読めるページです。
+      </p>
+      <p class="hero-note">
+        画面を下にスクロールして、それぞれの時間に触れてみてください。
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== 朝 ===== -->
+  <section class="chapter chapter-morning with-yuragi" id="morning">
+    <div class="chapter-inner">
+      <div class="chapter-title">Ⅰ. ぬくもりの記憶（朝）</div>
+      <div class="chapter-body">
+        <p class="story">
+小さな手が僕を光にかざした朝。
+世界は透けるように明るくて、
+触れてくれたそのぬくもりを、
+今でも覚えている。</p>
+
+        <p class="question">
+          <strong>ねえ、最近あなたが<br>
+“触れてみたいと思ったモノ” はある？</strong>
+        </p>
+
+        <button class="peek-button" data-target="depth-morning">
+          <img src="のぞくボタン.png" alt="のぞく">
+          <span>のぞく</span>
+        </button>
+
+        <div class="depth-panel" id="depth-morning">
+          <div class="depth-bg"></div>
+          <div class="depth-scrim"></div>
+          <div class="depth-content">
+            <h3>■ 深層のきざし</h3>
+            <p>触れたいと思うモノには、
+“安心”や“信頼”が息づいている。
+心は、そっと寄り添える相手を自然と選ぶ。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 昼 ===== -->
+  <section class="chapter chapter-noon with-yuragi" id="noon">
+    <div class="chapter-inner">
+      <div class="chapter-title">Ⅱ. 忘れかけた記憶（昼）</div>
+      <div class="chapter-body">
+        <p class="story">
+ガラスだった頃、
+窓辺で光を受けていても
+誰の目にも映らなくなった。
+ここにいたのに、見つからなかった。</p>
+
+        <p class="question">
+          <strong>あなたのそばにも、<br>
+いつの間にか“見なくなったモノ” はある？</strong>
+        </p>
+
+        <button class="peek-button" data-target="depth-noon">
+          <img src="のぞくボタン.png" alt="のぞく">
+          <span>のぞく</span>
+        </button>
+
+        <div class="depth-panel" id="depth-noon">
+          <div class="depth-bg"></div>
+          <div class="depth-scrim"></div>
+          <div class="depth-content">
+            <h3>■ 深層のきざし</h3>
+            <p>見なくなったモノは、
+そばにいることに慣れただけ。
+大切なモノほど、目にはうつしてくれない。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 夕 ===== -->
+  <section class="chapter chapter-evening with-yuragi" id="evening">
+    <div class="chapter-inner">
+      <div class="chapter-title">Ⅲ. とおのく記憶（夕）</div>
+      <div class="chapter-body">
+        <p class="story">
+波に削られ、
+少しずつ痛みが抜けていった。
+角が丸くなるたび、
+なんだか別の自分に近づいていくようだった。</p>
+
+        <p class="question">
+          <strong>壊れたり古くなっても、<br>
+“手放せないモノ” がある？</strong>
+        </p>
+
+        <button class="peek-button" data-target="depth-evening">
+          <img src="のぞくボタン.png" alt="のぞく">
+          <span>のぞく</span>
+        </button>
+
+        <div class="depth-panel" id="depth-evening">
+          <div class="depth-bg"></div>
+          <div class="depth-scrim"></div>
+          <div class="depth-content">
+            <h3>■ 深層のきざし</h3>
+            <p>手放せないモノは、
+形ではなく“そこに宿った記憶”を
+あなたが大切にしている証。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 夜 ===== -->
+  <section class="chapter chapter-night with-yuragi" id="night">
+    <div class="chapter-inner">
+      <div class="chapter-title">Ⅳ. いま（夜）</div>
+      <div class="chapter-body">
+        <p class="story">
+暗い海で、
+微かな光が僕を見つけた。
+“きれい” のひと言が、
+とても静かに心に触れた。</p>
+
+        <p class="question">
+          <strong>いま、あなたが<br>
+<strong>“もう一度拾い上げたいモノ” は何？</strong></strong>
+        </p>
+
+        <button class="peek-button" data-target="depth-night">
+          <img src="のぞくボタン.png" alt="のぞく">
+          <span>のぞく</span>
+        </button>
+
+        
+        <p class="story final-message">
+モノを選ぶときも手放すときも、あなたの気持ちが静かに映っている。その一瞬が、モノを大切にする心につながりますように。
+        </p>
+
+<div class="depth-panel" id="depth-night">
+          <div class="depth-bg"></div>
+          <div class="depth-scrim"></div>
+          <div class="depth-content">
+            <h3>■ 深層のきざし</h3>
+            <p>拾い上げたいと思うモノは、
+あなたが “再び向き合いたい” と感じる鏡。
+<span class="kizashi-nowrap">それは過去ではなく、いまのあなた自身。</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ===== 「のぞく」ボタン制御 =====
+  document.querySelectorAll(".peek-button").forEach(function(button) {
+    button.addEventListener("click", function() {
+      var targetId = button.getAttribute("data-target");
+      var panel = document.getElementById(targetId);
+      if (!panel) return;
+
+      var isOpen = panel.classList.contains("open");
+      panel.classList.toggle("open", !isOpen);
+
+      var label = button.querySelector("span");
+      if (label) {
+        label.textContent = isOpen ? "のぞく" : "とじる";
+      }
+    });
+  });
+
+  // ===== スクロール時のフェードイン =====
+  var chapters = document.querySelectorAll(".chapter");
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in-view");
+      }
+    });
+  }, {
+    threshold: 0.25
+  });
+
+  chapters.forEach(function(ch) {
+    observer.observe(ch);
+  });
+</script>
+
+  </body>
+</html>
